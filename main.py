@@ -86,38 +86,24 @@ async def on_message(msg):
     await events.process_random_events(ctx)
     await bot.process_commands(msg)
     
-# WYSZUKIWANIE WYRAZU "ZUCK"
-bot = commands.Bot(command_prefix="!", intents=intents)
-TARGET_WORD = "zuck"
-
-@bot.event
-async def on_ready():
-    print(f"Zalogowano jako {bot.user.name} (ID: {bot.user.id})")
-    print("Bot jest gotowy i nasłuchuje!")
-
-@bot.event
-async def on_message(message):
-    if message.author == bot.user:
-        return
-
-    words = message.content.lower().split()
-    detected = False
-
-    for word in words:
-        cleaned_word = word.strip(".,!?\"'()[]{}*_-")
-        distance = Levenshtein.distance(cleaned_word, TARGET_WORD)
-        
-        if distance <= 1:
-            detected = True
-            break
-
-    if detected:
-        await message.channel.send(f"{message.author.mention} co mnie obgadujesz??")
-
-    await bot.process_commands(message)
+    # WYSZUKIWANIE WYRAZU "ZUCK"
+    #bot = commands.Bot(command_prefix="!", intents=intents) # nie wiem po co to 
+    if "zuck" in content:
+        await msg.channel.send(f"{msg.author.mention} co mnie obgadujesz??")
 
 TOKEN = config.TOKEN
 bot.run(TOKEN)
+
+# ŚMIECI
+#@bot.event
+#async def on_ready():
+#    print(f"Zalogowano jako {bot.user.name} (ID: {bot.user.id})")
+#    print("Bot jest gotowy i nasłuchuje!")
+# 1. OPCJA: na później:
+# distance = Levenshtein.distance(cleaned_word, TARGET_WORD)
+# if distance <= 1: detected = True; break
+# 2. OPCJA: na później:
+# if re.match(r"^.zuck$|^z.ck$|^zu.k$|^zuc.$|^zuck.$|^.uck$", cleaned_word): detected = True; break
 
 # COMMANDS
 @bot.command()
